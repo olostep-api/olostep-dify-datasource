@@ -1,0 +1,14 @@
+[project]
+name = "olostep-dify-datasource"
+version = "0.1.0"
+description = "Olostep website crawl data source for Dify"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = ["dify_plugin>=0.9.0,<0.11", "httpx>=0.28.1,<0.29"]
+
+[dependency-groups]
+dev = ["pytest>=8,<10"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

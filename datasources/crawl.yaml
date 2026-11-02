@@ -1,0 +1,75 @@
+identity:
+  author: olostep
+  name: crawl
+  label:
+    en_US: Olostep Crawl
+description:
+  en_US: Crawl a website from a start URL and add the markdown of each page to your Knowledge Base.
+parameters:
+  - name: url
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Start URL
+    description:
+      en_US: The page to start crawling from, for example https://docs.olostep.com.
+  - name: crawl_subpages
+    type: boolean
+    default: true
+    form: form
+    label:
+      en_US: Crawl subpages
+    description:
+      en_US: Follow links from the start URL. Turn this off to read only that page.
+  - name: limit
+    type: number
+    default: 10
+    min: 1
+    max: 100000
+    form: form
+    label:
+      en_US: Maximum pages
+    description:
+      en_US: The maximum number of pages to crawl (1 to 100k).
+  - name: max_depth
+    type: number
+    min: 0
+    form: form
+    label:
+      en_US: Maximum depth
+    description:
+      en_US: How many links deep to follow from the start URL. Leave empty for no limit.
+  - name: include_paths
+    type: string
+    form: form
+    label:
+      en_US: URL patterns to include
+    description:
+      en_US: Comma-separated glob patterns. Only matching pages are crawled, for example /docs/**.
+  - name: exclude_paths
+    type: string
+    form: form
+    label:
+      en_US: URL patterns to exclude
+    description:
+      en_US: Comma-separated glob patterns to skip, for example /careers/**.
+output_schema:
+  type: object
+  properties:
+    source_url:
+      type: string
+      description: The URL of the page
+    content:
+      type: string
+      description: The markdown content of the page
+    title:
+      type: string
+      description: The title of the page
+    "description":
+      type: string
+      description: A short description of the page
+provider_type: website_crawl
+extra:
+  python:
+    source: datasources/crawl.py
