@@ -109,6 +109,16 @@ def test_title_and_description():
     assert title_and_description("", "https://a.com") == ("https://a.com", "")
 
 
+def test_title_fits_the_dify_document_name():
+    # Plain text files such as llms.txt come back as one long line with an escaped heading.
+    title, description = title_and_description("\\# Olostep Docs > " + "word " * 5000, "u")
+    assert title.startswith("Olostep Docs > word")
+    assert len(title) <= 200
+    assert description == ""
+    long_url = "https://a.com/" + "a" * 500
+    assert len(title_and_description("", long_url)[0]) <= 200
+
+
 def test_invalid_key_message_never_contains_the_key():
     def handler(request):
         return httpx.Response(401, json={})

@@ -15,6 +15,8 @@ ATTEMPTS = 3
 POLL_SECONDS = 10
 PAGE_SIZE = 50
 RETRIEVE_WORKERS = 8
+# Dify stores the title as the document name, which is limited to 255 characters.
+TITLE_LENGTH = 200
 DESCRIPTION_LENGTH = 200
 MIN_DESCRIPTION_LENGTH = 40
 NOT_PROSE = ("#", ">", "[", "!", "|", "`", "-", "*", "<")
@@ -36,9 +38,8 @@ def check_url(value: Any) -> str:
 def title_and_description(markdown: str, url: str) -> tuple[str, str]:
     """Olostep markdown starts with the page title. The description is the first line of prose after it."""
     lines = [line.strip() for line in markdown.splitlines() if line.strip()]
-    if not lines:
-        return url, ""
-    title = lines[0].lstrip("#").strip() or url
+    title = (lines[0].lstrip("\\# ") if lines else "") or url
+    title = title[:TITLE_LENGTH].strip()
     for line in lines[1:]:
         if len(line) >= MIN_DESCRIPTION_LENGTH and not line.startswith(NOT_PROSE) and "](" not in line:
             return title, line[:DESCRIPTION_LENGTH]
